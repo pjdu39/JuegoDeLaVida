@@ -13,9 +13,12 @@ namespace JuegoDeLaVida
         private readonly int _dimY;
         private readonly Size _rectSize;
 
-        public bool[,] stateMatrix { get; set; }
-        public Rectangle[,] graphicMatrixTrue { get; set; }
-        public Rectangle[,] graphicMatrixFalse { get; set; }
+        // TODO: Convertir a estáticos
+        public static bool[,] stateMatrix { get; set; }
+        public static Rectangle[,] graphicMatrixTrue { get; set; }
+        public static Rectangle[,] graphicMatrixFalse { get; set; }
+
+        public delegate void Figure();
 
         public MyMatrix(int dimX, int dimY, Size rectSize)
         {
@@ -36,7 +39,7 @@ namespace JuegoDeLaVida
             graphicMatrixTrue = new Rectangle[_dimX, _dimY];
             graphicMatrixFalse = new Rectangle[_dimX, _dimY];
 
-            for (int i=0; i<_dimX; i++)
+            for (int i = 0; i < _dimX; i++)
             {
                 for (int j = 0; j < _dimY; j++)
                 {
@@ -82,7 +85,7 @@ namespace JuegoDeLaVida
             }
         }
 
-        public void RandomFillState()
+        public void FillRandomState()
         {
             Random r = new Random();
             for (int i = 0; i < _dimX; i++)
@@ -95,25 +98,64 @@ namespace JuegoDeLaVida
             }
         }
 
-        public void CreatePlane()
+        public static void Plane()
         {
-            stateMatrix = new bool[_dimX, _dimY];
+            stateMatrix[0, 1] = true;
+            stateMatrix[1, 2] = true;
+            stateMatrix[2, 0] = true;
+            stateMatrix[2, 1] = true;
+            stateMatrix[2, 2] = true;
+        }
+
+        public static void Plane2()
+        {
+            stateMatrix[10, 11] = true;
+            stateMatrix[11, 12] = true;
+            stateMatrix[12, 10] = true;
+            stateMatrix[12, 11] = true;
+            stateMatrix[12, 12] = true;
+        }
+
+
+        public List<Figure> figuresList = new List<Figure>();
+
+        /*
+        public Figure fPlane = delegate (int dimX, int dimY)
+        {
             stateMatrix[9, 10] = true;
             stateMatrix[10, 11] = true;
             stateMatrix[11, 9] = true;
             stateMatrix[11, 10] = true;
             stateMatrix[11, 11] = true;
-        }
+        };
+
+        public Figure fPlane2 = delegate (int dimX, int dimY)
+        {
+            stateMatrix[0, 1] = true;
+            stateMatrix[1, 2] = true;
+            stateMatrix[2, 0] = true;
+            stateMatrix[2, 1] = true;
+            stateMatrix[2, 2] = true;
+        };
+        */
 
         public void Initialize()
         {
-            RandomFillState();
+            FillRandomState();
             FillGraphicMatrix();
         }
 
-        public void InitializeCustom()
+        public void InitializeCustom(List<Figure> fs)
         {
-            CreatePlane();
+            stateMatrix = new bool[_dimX, _dimY];
+
+            figuresList = fs;
+
+            foreach(var f in fs)
+            {
+                f();
+            }
+
             FillGraphicMatrix();
         }
     }

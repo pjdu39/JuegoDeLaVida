@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static JuegoDeLaVida.MyMatrix;
 
 namespace JuegoDeLaVida
 {
@@ -40,10 +41,12 @@ namespace JuegoDeLaVida
         {
             Graphics g = e.Graphics;
 
-            matrix.Initialize();
-            //matrix.InitializeCustom();
+            //matrix.Initialize();
 
-            foreach (var p in matrix.graphicMatrixTrue)
+            List<Figure> figures = new List<Figure> { Plane, Plane2 };
+            matrix.InitializeCustom(figures);
+
+            foreach (var p in MyMatrix.graphicMatrixTrue)
             {
                 g.FillRectangle(brushTrue, p);
             }
@@ -66,7 +69,7 @@ namespace JuegoDeLaVida
                 {
                     for (int j = 0; j < mapSize; j++)
                     {
-                        matrix.stateMatrix[j, i] = rect2dFilledAux[j, i];
+                        MyMatrix.stateMatrix[j, i] = rect2dFilledAux[j, i];
                     }
                 }
 
@@ -74,12 +77,12 @@ namespace JuegoDeLaVida
 
                 matrix.FillGraphicMatrix();
 
-                foreach(var p in matrix.graphicMatrixTrue)
+                foreach(var p in MyMatrix.graphicMatrixTrue)
                 {
                     g.FillRectangle(brushTrue, p);
                 }
 
-                foreach (var p in matrix.graphicMatrixFalse)
+                foreach (var p in MyMatrix.graphicMatrixFalse)
                 {
                     g.FillRectangle(brushFalse, p);
                 }
@@ -91,19 +94,19 @@ namespace JuegoDeLaVida
 
         public void SetNextCellState(int rectPosX, int rectPosY, int neighbors)
         {
-            if (matrix.stateMatrix[rectPosX, rectPosY] == true && (neighbors != 3 && neighbors != 2))
+            if (MyMatrix.stateMatrix[rectPosX, rectPosY] == true && (neighbors != 3 && neighbors != 2))
             {
                 rect2dFilledAux[rectPosX, rectPosY] = false;
             }
-            else if (matrix.stateMatrix[rectPosX, rectPosY] == true && (neighbors == 3 || neighbors == 2))
+            else if (MyMatrix.stateMatrix[rectPosX, rectPosY] == true && (neighbors == 3 || neighbors == 2))
             {
                 rect2dFilledAux[rectPosX, rectPosY] = true;
             }
-            else if (matrix.stateMatrix[rectPosX, rectPosY] == false && neighbors == 3)
+            else if (MyMatrix.stateMatrix[rectPosX, rectPosY] == false && neighbors == 3)
             {
                 rect2dFilledAux[rectPosX, rectPosY] = true;
             }
-            else if (matrix.stateMatrix[rectPosX, rectPosY] == false && neighbors != 3)
+            else if (MyMatrix.stateMatrix[rectPosX, rectPosY] == false && neighbors != 3)
             {
                 rect2dFilledAux[rectPosX, rectPosY] = false;
             }
@@ -202,7 +205,7 @@ namespace JuegoDeLaVida
                     }
 
                     // Cumprueba vecinos pero se excluye a si mismo
-                    if (matrix.stateMatrix[neighborX, neighborY] == true && (neighborX != rectPosX || neighborY != rectPosY))
+                    if (MyMatrix.stateMatrix[neighborX, neighborY] == true && (neighborX != rectPosX || neighborY != rectPosY))
                     {
                         result++;
                     }
